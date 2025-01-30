@@ -1,73 +1,37 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Prueba Técnica: Sección 3 item 10 (Implementar endpoint)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Para el desarrollo de la prueba se optó por utilizar el framework nest https://nestjs.com/ el cual está construido sobre express. Este brinda un motor de inyección de dependencia el cual permite  construir soluciones con mejores practicas de desarrollo.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Desarrollo de la API-REST
+Para el desarrollo de la API-REST se utilizó una arquitectura de tres capas:
+- controller
+- persistence
+- services
 
-## Description
+Se construyó el endpoint POST: api/v1/user el cual permite el registro de usuarios en el sistema. El endpoint recibe en el cuerpo de la solictud un documento JSON el cual será validado por el servidor y posteriormente lo persistirá en una base de datos Postgres.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+!["request"](/assets/postman.png)
 
-## Installation
+> **_NOTA:_**  Ver la documentación del enpoint publicada en el siguinte enlace: https://documenter.getpostman.com/view/19057359/2sAYX2Miw6
 
-```bash
-$ npm install
-```
+### Validacion de los datos
+El servidor mediante la libreria de class-validator realiza la validacion de cada uno de los campos ingresados antes de realizar la presistencia.
 
-## Running the app
+1. El campo name y lastname de ser  de tipo string, tener por lo menos un caracter y no supera la maxima longitud permitida de 16 caracteres.
 
-```bash
-# development
-$ npm run start
+2. El campo email se validrá de tenga un formato de correo electrónico valido.
 
-# watch mode
-$ npm run start:dev
+3. El campo phone deberá tener un formato de número telefonico valido.
 
-# production mode
-$ npm run start:prod
-```
+Si alguna de la validaciones falla el servidor cancelará la solicitud y responderá al cliente con un código 400 (Bad Request) indicando el o los campo errados.
 
-## Test
+!["bad-reuest"](/assets/bad-request.png)
 
-```bash
-# unit tests
-$ npm run test
+### Persistencia  de los datos
+Para esta tarea se implementó la base de datos Postgres. el servidor se conectó a esta utilizando el ORM TypeORM.
 
-# e2e tests
-$ npm run test:e2e
+!["data-base"](/assets/database.png)
 
-# test coverage
-$ npm run test:cov
-```
+Se utilizó repository como patrón para la persistencia de los datos y desacoplar lógica de dominio de los detalles de la base de datos.
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Verificando el funcionaminto del proyecto.
